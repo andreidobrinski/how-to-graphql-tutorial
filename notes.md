@@ -2,6 +2,8 @@
 
 [Link to tutorial](https://www.howtographql.com/)
 
+## Fundamentals
+
 What is GraphQL
 
 - new API standard developed by FB an open sourced
@@ -145,3 +147,95 @@ Declarative Data Fetching
 1. describe data requirements
 2. display information in the UI
 3. everything else is done by the gql client (relay or apollo)
+
+## Advanced
+
+Fragments
+
+- helps makes queries reusable by representing what data to query
+
+eg:
+Type
+
+```
+type User {
+  name: String!
+  age: Int!
+  email: String!
+  street: String!
+  zipcode: String!
+  city: String!
+}
+```
+
+Fragment
+
+```
+fragment addressDetails on User {
+  name
+  street
+  zipcode
+  city
+}
+```
+
+This means that these two are the same:
+
+```
+{
+  allUsers {
+    ... addressDetails
+  }
+}
+
+// and
+
+{
+  allUsers {
+    name
+    street
+    zipcode
+    city
+  }
+}
+```
+
+Aliases (Named Query Results)
+
+- lets you add aliases to queries:
+
+```
+{
+  first: User(id: "1") {
+    name
+  }
+  second: User(id: "2") {
+    name
+  }
+}
+```
+
+where `first` and `second` are the aliases
+
+Types
+
+- Scalar types: String, Int, Float, Boolean, ID. can add custom scalar types
+- Object types: have fields and are composable
+- Enums (technically a specific type of scalar types)
+- Interface: describes a type to be implemented later
+- Union: "|" operator, describes when something an be either type
+- Conditional fragments: to define fields on subtypes
+
+```
+{
+  allPersons {
+    name # works for `Adult` and `Child`
+    ... on Child {
+      school
+    }
+    ... on Adult {
+       work
+    }
+  }
+}
+```
